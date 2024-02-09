@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Form, Spinner } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
@@ -61,10 +62,9 @@ const Countries = () => {
           .map((country) => (
             <Col className="mt-5" key={country.name.common}>
               <Card className="h-100">
-                <i
-                  className="bi bi-heart-fill text-danger m-1 p-1"
-                  onClick={() => dispatch(addFavourite(country.name.common))}
-                ></i>
+                <FavoriteIcon
+                  onClick={() => dispatch(addFavourite(country))}
+                ></FavoriteIcon>
                 <Link
                   to={`/countries/${country.name.common}`}
                   state={{ country: country }}
