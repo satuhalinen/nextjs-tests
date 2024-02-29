@@ -1,12 +1,28 @@
+import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Row from "react-bootstrap/Row";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { logout } from "../auth/firebase";
+import { auth, getNameOfUser, logout } from "../auth/firebase";
 
 const Header = () => {
+  const [user, loading, error] = useAuthState(auth);
+
+  const [name, setName] = useState();
+
+  useEffect(() => {
+    if (user) {
+      getNameOfUser(user).then((name) => {
+        setName(name);
+      });
+    }
+  }, [user]);
+
+  console.log("getNameOfUser: ", getNameOfUser(user));
+
   return (
     <Container fluid>
       <Row>
@@ -32,6 +48,10 @@ const Header = () => {
                 </Link>
                 <Button onClick={logout}>Logout</Button>
               </Nav>
+              {/* Insert bootstrap text container here */}
+              <Navbar.Text>
+                {name ? `Welcome, ${name}` : "Welcome, Guest"}
+              </Navbar.Text>
             </Navbar.Collapse>
           </Container>
         </Navbar>

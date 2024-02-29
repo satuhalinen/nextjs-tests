@@ -4,7 +4,14 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -53,6 +60,19 @@ export const loginWithEmailAndPassword = async (email, password) => {
 
 export const logout = () => {
   auth.signOut();
+};
+
+export const getNameOfUser = async (user) => {
+  if (user) {
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const name = doc.data().name;
+      return name;
+    });
+  } else {
+    return null;
+  }
 };
 
 export { auth, db, registerWithEmailAndPassword };
