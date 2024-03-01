@@ -1,3 +1,4 @@
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
@@ -6,22 +7,27 @@ import Navbar from "react-bootstrap/Navbar";
 import Row from "react-bootstrap/Row";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-import { auth, getNameOfUser, logout } from "../auth/firebase";
+import { auth, db, logout } from "../auth/firebase";
 
 const Header = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
 
   const [name, setName] = useState();
 
   useEffect(() => {
-    if (user) {
-      getNameOfUser(user).then((name) => {
+    const getUserData = async () => {
+      const q = query(collection(db, "users"), where("uid", "==", user?.uid));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const name = doc.data().name;
         setName(name);
       });
+    };
+
+    if (user) {
+      getUserData();
     }
   }, [user]);
-
-  console.log("getNameOfUser: ", getNameOfUser(user));
 
   return (
     <Container fluid>

@@ -68,6 +68,7 @@ export const getNameOfUser = async (user) => {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       const name = doc.data().name;
+      console.log("name from getNameOfuser: ", name);
       return name;
     });
   } else {
