@@ -32,7 +32,7 @@ describe("countriesSlice tests", () => {
   it("Should handle initializeCountries", async () => {
     const mockCountries = ["Country 1", "Country 2"];
     countriesService.getAll.mockResolvedValue(mockCountries);
-    console.log(store.dispatch(initializeCountries()));
+    await store.dispatch(initializeCountries());
     expect(store.getState().countries.countries).toEqual(mockCountries);
     expect(store.getState().countries.isLoading).toEqual(false);
   });
